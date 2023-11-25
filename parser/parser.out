@@ -1,0 +1,781 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    ELSE
+    GREATER
+    GREATER_EQUAL
+    LESS
+    LESS_EQUAL
+    LPAREN
+    RPAREN
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> PROGRAM IDENTIFIER SEMICOLON declaration_list compound_statement DOT
+Rule 2     declaration_list -> declaration_list declaration
+Rule 3     declaration_list -> empty
+Rule 4     declaration -> VAR variable_list COLON type SEMICOLON
+Rule 5     variable_list -> variable_list COMMA IDENTIFIER
+Rule 6     variable_list -> IDENTIFIER
+Rule 7     type -> INTEGER
+Rule 8     type -> REAL
+Rule 9     compound_statement -> BEGIN statement_list END
+Rule 10    statement_list -> statement_list SEMICOLON statement
+Rule 11    statement_list -> statement
+Rule 12    statement -> assignment_statement
+Rule 13    statement -> if_statement
+Rule 14    statement -> while_statement
+Rule 15    statement -> read_statement
+Rule 16    statement -> write_statement
+Rule 17    assignment_statement -> IDENTIFIER ASSIGN expression
+Rule 18    if_statement -> IF expression THEN statement
+Rule 19    while_statement -> WHILE expression DO statement
+Rule 20    read_statement -> READ IDENTIFIER
+Rule 21    write_statement -> WRITE expression
+Rule 22    expression -> expression PLUS term
+Rule 23    expression -> expression MINUS term
+Rule 24    expression -> term
+Rule 25    term -> term TIMES factor
+Rule 26    term -> term DIVIDE factor
+Rule 27    term -> factor
+Rule 28    factor -> NUMBER
+Rule 29    factor -> IDENTIFIER
+Rule 30    empty -> <empty>
+
+Terminals, with rules where they appear
+
+ASSIGN               : 17
+BEGIN                : 9
+COLON                : 4
+COMMA                : 5
+DIVIDE               : 26
+DO                   : 19
+DOT                  : 1
+ELSE                 : 
+END                  : 9
+GREATER              : 
+GREATER_EQUAL        : 
+IDENTIFIER           : 1 5 6 17 20 29
+IF                   : 18
+INTEGER              : 7
+LESS                 : 
+LESS_EQUAL           : 
+LPAREN               : 
+MINUS                : 23
+NUMBER               : 28
+PLUS                 : 22
+PROGRAM              : 1
+READ                 : 20
+REAL                 : 8
+RPAREN               : 
+SEMICOLON            : 1 4 10
+THEN                 : 18
+TIMES                : 25
+VAR                  : 4
+WHILE                : 19
+WRITE                : 21
+error                : 
+
+Nonterminals, with rules where they appear
+
+assignment_statement : 12
+compound_statement   : 1
+declaration          : 2
+declaration_list     : 1 2
+empty                : 3
+expression           : 17 18 19 21 22 23
+factor               : 25 26 27
+if_statement         : 13
+program              : 0
+read_statement       : 15
+statement            : 10 11 18 19
+statement_list       : 9 10
+term                 : 22 23 24 25 26
+type                 : 4
+variable_list        : 4 5
+while_statement      : 14
+write_statement      : 16
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . PROGRAM IDENTIFIER SEMICOLON declaration_list compound_statement DOT
+
+    PROGRAM         shift and go to state 2
+
+    program                        shift and go to state 1
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> PROGRAM . IDENTIFIER SEMICOLON declaration_list compound_statement DOT
+
+    IDENTIFIER      shift and go to state 3
+
+
+state 3
+
+    (1) program -> PROGRAM IDENTIFIER . SEMICOLON declaration_list compound_statement DOT
+
+    SEMICOLON       shift and go to state 4
+
+
+state 4
+
+    (1) program -> PROGRAM IDENTIFIER SEMICOLON . declaration_list compound_statement DOT
+    (2) declaration_list -> . declaration_list declaration
+    (3) declaration_list -> . empty
+    (30) empty -> .
+
+    BEGIN           reduce using rule 30 (empty -> .)
+    VAR             reduce using rule 30 (empty -> .)
+
+    declaration_list               shift and go to state 5
+    empty                          shift and go to state 6
+
+state 5
+
+    (1) program -> PROGRAM IDENTIFIER SEMICOLON declaration_list . compound_statement DOT
+    (2) declaration_list -> declaration_list . declaration
+    (9) compound_statement -> . BEGIN statement_list END
+    (4) declaration -> . VAR variable_list COLON type SEMICOLON
+
+    BEGIN           shift and go to state 9
+    VAR             shift and go to state 10
+
+    compound_statement             shift and go to state 7
+    declaration                    shift and go to state 8
+
+state 6
+
+    (3) declaration_list -> empty .
+
+    BEGIN           reduce using rule 3 (declaration_list -> empty .)
+    VAR             reduce using rule 3 (declaration_list -> empty .)
+
+
+state 7
+
+    (1) program -> PROGRAM IDENTIFIER SEMICOLON declaration_list compound_statement . DOT
+
+    DOT             shift and go to state 11
+
+
+state 8
+
+    (2) declaration_list -> declaration_list declaration .
+
+    BEGIN           reduce using rule 2 (declaration_list -> declaration_list declaration .)
+    VAR             reduce using rule 2 (declaration_list -> declaration_list declaration .)
+
+
+state 9
+
+    (9) compound_statement -> BEGIN . statement_list END
+    (10) statement_list -> . statement_list SEMICOLON statement
+    (11) statement_list -> . statement
+    (12) statement -> . assignment_statement
+    (13) statement -> . if_statement
+    (14) statement -> . while_statement
+    (15) statement -> . read_statement
+    (16) statement -> . write_statement
+    (17) assignment_statement -> . IDENTIFIER ASSIGN expression
+    (18) if_statement -> . IF expression THEN statement
+    (19) while_statement -> . WHILE expression DO statement
+    (20) read_statement -> . READ IDENTIFIER
+    (21) write_statement -> . WRITE expression
+
+    IDENTIFIER      shift and go to state 19
+    IF              shift and go to state 20
+    WHILE           shift and go to state 21
+    READ            shift and go to state 22
+    WRITE           shift and go to state 23
+
+    statement_list                 shift and go to state 12
+    statement                      shift and go to state 13
+    assignment_statement           shift and go to state 14
+    if_statement                   shift and go to state 15
+    while_statement                shift and go to state 16
+    read_statement                 shift and go to state 17
+    write_statement                shift and go to state 18
+
+state 10
+
+    (4) declaration -> VAR . variable_list COLON type SEMICOLON
+    (5) variable_list -> . variable_list COMMA IDENTIFIER
+    (6) variable_list -> . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 25
+
+    variable_list                  shift and go to state 24
+
+state 11
+
+    (1) program -> PROGRAM IDENTIFIER SEMICOLON declaration_list compound_statement DOT .
+
+    $end            reduce using rule 1 (program -> PROGRAM IDENTIFIER SEMICOLON declaration_list compound_statement DOT .)
+
+
+state 12
+
+    (9) compound_statement -> BEGIN statement_list . END
+    (10) statement_list -> statement_list . SEMICOLON statement
+
+    END             shift and go to state 26
+    SEMICOLON       shift and go to state 27
+
+
+state 13
+
+    (11) statement_list -> statement .
+
+    END             reduce using rule 11 (statement_list -> statement .)
+    SEMICOLON       reduce using rule 11 (statement_list -> statement .)
+
+
+state 14
+
+    (12) statement -> assignment_statement .
+
+    END             reduce using rule 12 (statement -> assignment_statement .)
+    SEMICOLON       reduce using rule 12 (statement -> assignment_statement .)
+
+
+state 15
+
+    (13) statement -> if_statement .
+
+    END             reduce using rule 13 (statement -> if_statement .)
+    SEMICOLON       reduce using rule 13 (statement -> if_statement .)
+
+
+state 16
+
+    (14) statement -> while_statement .
+
+    END             reduce using rule 14 (statement -> while_statement .)
+    SEMICOLON       reduce using rule 14 (statement -> while_statement .)
+
+
+state 17
+
+    (15) statement -> read_statement .
+
+    END             reduce using rule 15 (statement -> read_statement .)
+    SEMICOLON       reduce using rule 15 (statement -> read_statement .)
+
+
+state 18
+
+    (16) statement -> write_statement .
+
+    END             reduce using rule 16 (statement -> write_statement .)
+    SEMICOLON       reduce using rule 16 (statement -> write_statement .)
+
+
+state 19
+
+    (17) assignment_statement -> IDENTIFIER . ASSIGN expression
+
+    ASSIGN          shift and go to state 28
+
+
+state 20
+
+    (18) if_statement -> IF . expression THEN statement
+    (22) expression -> . expression PLUS term
+    (23) expression -> . expression MINUS term
+    (24) expression -> . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    expression                     shift and go to state 29
+    term                           shift and go to state 30
+    factor                         shift and go to state 31
+
+state 21
+
+    (19) while_statement -> WHILE . expression DO statement
+    (22) expression -> . expression PLUS term
+    (23) expression -> . expression MINUS term
+    (24) expression -> . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    expression                     shift and go to state 34
+    term                           shift and go to state 30
+    factor                         shift and go to state 31
+
+state 22
+
+    (20) read_statement -> READ . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 35
+
+
+state 23
+
+    (21) write_statement -> WRITE . expression
+    (22) expression -> . expression PLUS term
+    (23) expression -> . expression MINUS term
+    (24) expression -> . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    expression                     shift and go to state 36
+    term                           shift and go to state 30
+    factor                         shift and go to state 31
+
+state 24
+
+    (4) declaration -> VAR variable_list . COLON type SEMICOLON
+    (5) variable_list -> variable_list . COMMA IDENTIFIER
+
+    COLON           shift and go to state 37
+    COMMA           shift and go to state 38
+
+
+state 25
+
+    (6) variable_list -> IDENTIFIER .
+
+    COLON           reduce using rule 6 (variable_list -> IDENTIFIER .)
+    COMMA           reduce using rule 6 (variable_list -> IDENTIFIER .)
+
+
+state 26
+
+    (9) compound_statement -> BEGIN statement_list END .
+
+    DOT             reduce using rule 9 (compound_statement -> BEGIN statement_list END .)
+
+
+state 27
+
+    (10) statement_list -> statement_list SEMICOLON . statement
+    (12) statement -> . assignment_statement
+    (13) statement -> . if_statement
+    (14) statement -> . while_statement
+    (15) statement -> . read_statement
+    (16) statement -> . write_statement
+    (17) assignment_statement -> . IDENTIFIER ASSIGN expression
+    (18) if_statement -> . IF expression THEN statement
+    (19) while_statement -> . WHILE expression DO statement
+    (20) read_statement -> . READ IDENTIFIER
+    (21) write_statement -> . WRITE expression
+
+    IDENTIFIER      shift and go to state 19
+    IF              shift and go to state 20
+    WHILE           shift and go to state 21
+    READ            shift and go to state 22
+    WRITE           shift and go to state 23
+
+    statement                      shift and go to state 39
+    assignment_statement           shift and go to state 14
+    if_statement                   shift and go to state 15
+    while_statement                shift and go to state 16
+    read_statement                 shift and go to state 17
+    write_statement                shift and go to state 18
+
+state 28
+
+    (17) assignment_statement -> IDENTIFIER ASSIGN . expression
+    (22) expression -> . expression PLUS term
+    (23) expression -> . expression MINUS term
+    (24) expression -> . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    expression                     shift and go to state 40
+    term                           shift and go to state 30
+    factor                         shift and go to state 31
+
+state 29
+
+    (18) if_statement -> IF expression . THEN statement
+    (22) expression -> expression . PLUS term
+    (23) expression -> expression . MINUS term
+
+    THEN            shift and go to state 41
+    PLUS            shift and go to state 42
+    MINUS           shift and go to state 43
+
+
+state 30
+
+    (24) expression -> term .
+    (25) term -> term . TIMES factor
+    (26) term -> term . DIVIDE factor
+
+    THEN            reduce using rule 24 (expression -> term .)
+    PLUS            reduce using rule 24 (expression -> term .)
+    MINUS           reduce using rule 24 (expression -> term .)
+    DO              reduce using rule 24 (expression -> term .)
+    END             reduce using rule 24 (expression -> term .)
+    SEMICOLON       reduce using rule 24 (expression -> term .)
+    TIMES           shift and go to state 44
+    DIVIDE          shift and go to state 45
+
+
+state 31
+
+    (27) term -> factor .
+
+    TIMES           reduce using rule 27 (term -> factor .)
+    DIVIDE          reduce using rule 27 (term -> factor .)
+    THEN            reduce using rule 27 (term -> factor .)
+    PLUS            reduce using rule 27 (term -> factor .)
+    MINUS           reduce using rule 27 (term -> factor .)
+    DO              reduce using rule 27 (term -> factor .)
+    END             reduce using rule 27 (term -> factor .)
+    SEMICOLON       reduce using rule 27 (term -> factor .)
+
+
+state 32
+
+    (28) factor -> NUMBER .
+
+    TIMES           reduce using rule 28 (factor -> NUMBER .)
+    DIVIDE          reduce using rule 28 (factor -> NUMBER .)
+    THEN            reduce using rule 28 (factor -> NUMBER .)
+    PLUS            reduce using rule 28 (factor -> NUMBER .)
+    MINUS           reduce using rule 28 (factor -> NUMBER .)
+    DO              reduce using rule 28 (factor -> NUMBER .)
+    END             reduce using rule 28 (factor -> NUMBER .)
+    SEMICOLON       reduce using rule 28 (factor -> NUMBER .)
+
+
+state 33
+
+    (29) factor -> IDENTIFIER .
+
+    TIMES           reduce using rule 29 (factor -> IDENTIFIER .)
+    DIVIDE          reduce using rule 29 (factor -> IDENTIFIER .)
+    THEN            reduce using rule 29 (factor -> IDENTIFIER .)
+    PLUS            reduce using rule 29 (factor -> IDENTIFIER .)
+    MINUS           reduce using rule 29 (factor -> IDENTIFIER .)
+    DO              reduce using rule 29 (factor -> IDENTIFIER .)
+    END             reduce using rule 29 (factor -> IDENTIFIER .)
+    SEMICOLON       reduce using rule 29 (factor -> IDENTIFIER .)
+
+
+state 34
+
+    (19) while_statement -> WHILE expression . DO statement
+    (22) expression -> expression . PLUS term
+    (23) expression -> expression . MINUS term
+
+    DO              shift and go to state 46
+    PLUS            shift and go to state 42
+    MINUS           shift and go to state 43
+
+
+state 35
+
+    (20) read_statement -> READ IDENTIFIER .
+
+    END             reduce using rule 20 (read_statement -> READ IDENTIFIER .)
+    SEMICOLON       reduce using rule 20 (read_statement -> READ IDENTIFIER .)
+
+
+state 36
+
+    (21) write_statement -> WRITE expression .
+    (22) expression -> expression . PLUS term
+    (23) expression -> expression . MINUS term
+
+    END             reduce using rule 21 (write_statement -> WRITE expression .)
+    SEMICOLON       reduce using rule 21 (write_statement -> WRITE expression .)
+    PLUS            shift and go to state 42
+    MINUS           shift and go to state 43
+
+
+state 37
+
+    (4) declaration -> VAR variable_list COLON . type SEMICOLON
+    (7) type -> . INTEGER
+    (8) type -> . REAL
+
+    INTEGER         shift and go to state 48
+    REAL            shift and go to state 49
+
+    type                           shift and go to state 47
+
+state 38
+
+    (5) variable_list -> variable_list COMMA . IDENTIFIER
+
+    IDENTIFIER      shift and go to state 50
+
+
+state 39
+
+    (10) statement_list -> statement_list SEMICOLON statement .
+
+    END             reduce using rule 10 (statement_list -> statement_list SEMICOLON statement .)
+    SEMICOLON       reduce using rule 10 (statement_list -> statement_list SEMICOLON statement .)
+
+
+state 40
+
+    (17) assignment_statement -> IDENTIFIER ASSIGN expression .
+    (22) expression -> expression . PLUS term
+    (23) expression -> expression . MINUS term
+
+    END             reduce using rule 17 (assignment_statement -> IDENTIFIER ASSIGN expression .)
+    SEMICOLON       reduce using rule 17 (assignment_statement -> IDENTIFIER ASSIGN expression .)
+    PLUS            shift and go to state 42
+    MINUS           shift and go to state 43
+
+
+state 41
+
+    (18) if_statement -> IF expression THEN . statement
+    (12) statement -> . assignment_statement
+    (13) statement -> . if_statement
+    (14) statement -> . while_statement
+    (15) statement -> . read_statement
+    (16) statement -> . write_statement
+    (17) assignment_statement -> . IDENTIFIER ASSIGN expression
+    (18) if_statement -> . IF expression THEN statement
+    (19) while_statement -> . WHILE expression DO statement
+    (20) read_statement -> . READ IDENTIFIER
+    (21) write_statement -> . WRITE expression
+
+    IDENTIFIER      shift and go to state 19
+    IF              shift and go to state 20
+    WHILE           shift and go to state 21
+    READ            shift and go to state 22
+    WRITE           shift and go to state 23
+
+    statement                      shift and go to state 51
+    assignment_statement           shift and go to state 14
+    if_statement                   shift and go to state 15
+    while_statement                shift and go to state 16
+    read_statement                 shift and go to state 17
+    write_statement                shift and go to state 18
+
+state 42
+
+    (22) expression -> expression PLUS . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    term                           shift and go to state 52
+    factor                         shift and go to state 31
+
+state 43
+
+    (23) expression -> expression MINUS . term
+    (25) term -> . term TIMES factor
+    (26) term -> . term DIVIDE factor
+    (27) term -> . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    term                           shift and go to state 53
+    factor                         shift and go to state 31
+
+state 44
+
+    (25) term -> term TIMES . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    factor                         shift and go to state 54
+
+state 45
+
+    (26) term -> term DIVIDE . factor
+    (28) factor -> . NUMBER
+    (29) factor -> . IDENTIFIER
+
+    NUMBER          shift and go to state 32
+    IDENTIFIER      shift and go to state 33
+
+    factor                         shift and go to state 55
+
+state 46
+
+    (19) while_statement -> WHILE expression DO . statement
+    (12) statement -> . assignment_statement
+    (13) statement -> . if_statement
+    (14) statement -> . while_statement
+    (15) statement -> . read_statement
+    (16) statement -> . write_statement
+    (17) assignment_statement -> . IDENTIFIER ASSIGN expression
+    (18) if_statement -> . IF expression THEN statement
+    (19) while_statement -> . WHILE expression DO statement
+    (20) read_statement -> . READ IDENTIFIER
+    (21) write_statement -> . WRITE expression
+
+    IDENTIFIER      shift and go to state 19
+    IF              shift and go to state 20
+    WHILE           shift and go to state 21
+    READ            shift and go to state 22
+    WRITE           shift and go to state 23
+
+    statement                      shift and go to state 56
+    assignment_statement           shift and go to state 14
+    if_statement                   shift and go to state 15
+    while_statement                shift and go to state 16
+    read_statement                 shift and go to state 17
+    write_statement                shift and go to state 18
+
+state 47
+
+    (4) declaration -> VAR variable_list COLON type . SEMICOLON
+
+    SEMICOLON       shift and go to state 57
+
+
+state 48
+
+    (7) type -> INTEGER .
+
+    SEMICOLON       reduce using rule 7 (type -> INTEGER .)
+
+
+state 49
+
+    (8) type -> REAL .
+
+    SEMICOLON       reduce using rule 8 (type -> REAL .)
+
+
+state 50
+
+    (5) variable_list -> variable_list COMMA IDENTIFIER .
+
+    COLON           reduce using rule 5 (variable_list -> variable_list COMMA IDENTIFIER .)
+    COMMA           reduce using rule 5 (variable_list -> variable_list COMMA IDENTIFIER .)
+
+
+state 51
+
+    (18) if_statement -> IF expression THEN statement .
+
+    END             reduce using rule 18 (if_statement -> IF expression THEN statement .)
+    SEMICOLON       reduce using rule 18 (if_statement -> IF expression THEN statement .)
+
+
+state 52
+
+    (22) expression -> expression PLUS term .
+    (25) term -> term . TIMES factor
+    (26) term -> term . DIVIDE factor
+
+    THEN            reduce using rule 22 (expression -> expression PLUS term .)
+    PLUS            reduce using rule 22 (expression -> expression PLUS term .)
+    MINUS           reduce using rule 22 (expression -> expression PLUS term .)
+    DO              reduce using rule 22 (expression -> expression PLUS term .)
+    END             reduce using rule 22 (expression -> expression PLUS term .)
+    SEMICOLON       reduce using rule 22 (expression -> expression PLUS term .)
+    TIMES           shift and go to state 44
+    DIVIDE          shift and go to state 45
+
+
+state 53
+
+    (23) expression -> expression MINUS term .
+    (25) term -> term . TIMES factor
+    (26) term -> term . DIVIDE factor
+
+    THEN            reduce using rule 23 (expression -> expression MINUS term .)
+    PLUS            reduce using rule 23 (expression -> expression MINUS term .)
+    MINUS           reduce using rule 23 (expression -> expression MINUS term .)
+    DO              reduce using rule 23 (expression -> expression MINUS term .)
+    END             reduce using rule 23 (expression -> expression MINUS term .)
+    SEMICOLON       reduce using rule 23 (expression -> expression MINUS term .)
+    TIMES           shift and go to state 44
+    DIVIDE          shift and go to state 45
+
+
+state 54
+
+    (25) term -> term TIMES factor .
+
+    TIMES           reduce using rule 25 (term -> term TIMES factor .)
+    DIVIDE          reduce using rule 25 (term -> term TIMES factor .)
+    THEN            reduce using rule 25 (term -> term TIMES factor .)
+    PLUS            reduce using rule 25 (term -> term TIMES factor .)
+    MINUS           reduce using rule 25 (term -> term TIMES factor .)
+    DO              reduce using rule 25 (term -> term TIMES factor .)
+    END             reduce using rule 25 (term -> term TIMES factor .)
+    SEMICOLON       reduce using rule 25 (term -> term TIMES factor .)
+
+
+state 55
+
+    (26) term -> term DIVIDE factor .
+
+    TIMES           reduce using rule 26 (term -> term DIVIDE factor .)
+    DIVIDE          reduce using rule 26 (term -> term DIVIDE factor .)
+    THEN            reduce using rule 26 (term -> term DIVIDE factor .)
+    PLUS            reduce using rule 26 (term -> term DIVIDE factor .)
+    MINUS           reduce using rule 26 (term -> term DIVIDE factor .)
+    DO              reduce using rule 26 (term -> term DIVIDE factor .)
+    END             reduce using rule 26 (term -> term DIVIDE factor .)
+    SEMICOLON       reduce using rule 26 (term -> term DIVIDE factor .)
+
+
+state 56
+
+    (19) while_statement -> WHILE expression DO statement .
+
+    END             reduce using rule 19 (while_statement -> WHILE expression DO statement .)
+    SEMICOLON       reduce using rule 19 (while_statement -> WHILE expression DO statement .)
+
+
+state 57
+
+    (4) declaration -> VAR variable_list COLON type SEMICOLON .
+
+    BEGIN           reduce using rule 4 (declaration -> VAR variable_list COLON type SEMICOLON .)
+    VAR             reduce using rule 4 (declaration -> VAR variable_list COLON type SEMICOLON .)
+
