@@ -49,8 +49,10 @@ def p_type(p):
 
 #compound statement
 def p_compound_statement(p):
-  'compound_statement : BEGIN statement_list END'
-  p[0] = ('compound', p[2])
+    'compound_statement : BEGIN statement_list END'
+    semantic_analyzer.enter_scope()
+    p[0] = ('compound', p[2])
+    semantic_analyzer.exit_scope()
 
 #statement list
 def p_statement_list(p):
@@ -100,8 +102,12 @@ def get_expr_type(expr):
 
 #if statement
 def p_if_statement(p):
-    'if_statement : IF expression THEN statement'
-    p[0] = ('if', p[2], p[4])
+    '''if_statement : IF expression THEN statement
+                    | IF expression THEN statement ELSE statement'''
+    if len(p) == 5:
+        p[0] = ('if', p[2], p[4], None)
+    elif len(p) == 7:
+        p[0] = ('if', p[2], p[4], p[6])
 
 #while statement
 def p_while_statement(p):
@@ -118,15 +124,25 @@ def p_write_statement(p):
     'write_statement : WRITE expression'
     p[0] = ('write', p[2])
 
+# Relational expressions
+def p_relational_expression(p):
+    '''relational_expression : expression GREATER expression
+                             | expression LESS expression
+                             | expression GREATER_EQUAL expression
+                             | expression LESS_EQUAL expression'''
+    if len(p) == 4:
+        p[0] = ('relational', p[1], p[2], p[3])
+
 #expression
 def p_expression(p):
-    '''expression : expression PLUS term
+    '''expression : relational_expression
+                  | expression PLUS term
                   | expression MINUS term
                   | term'''
-    if len(p) == 4:
-        p[0] = ('binop', p[1], p[2], p[3])
-    else:
+    if len(p) == 2:
         p[0] = p[1]
+    elif len(p) == 4:
+        p[0] = ('binop', p[1], p[2], p[3])
 
 #term
 def p_term(p):
