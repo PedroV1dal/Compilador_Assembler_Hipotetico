@@ -81,16 +81,17 @@ def p_assignment_statement(p):
     p[0] = ('assign', var_name, p[3])
 
 def get_expr_type(expr):
-    if isinstance(expr, tuple) and expr[0] == 'binop':
-        left_type = get_expr_type(expr[1])
-        right_type = get_expr_type(expr[3])
-        if left_type != right_type:
-            raise Exception(f"Type mismatch in expression: left is {left_type}, right is {right_type}")
-        return left_type
-    elif isinstance(expr, tuple) and expr[0] == 'number':
-        return 'integer'
-    elif isinstance(expr, tuple) and expr[0] == 'identifier':
-        return semantic_analyzer.use_var(expr[1])
+    if isinstance(expr, tuple):
+        if expr[0] == 'binop':
+            left_type = get_expr_type(expr[1])
+            right_type = get_expr_type(expr[3])
+            if left_type != right_type:
+                raise Exception(f"Type mismatch in expression: left is {left_type}, right is {right_type}")
+            return left_type 
+        elif expr[0] == 'identifier':
+            return semantic_analyzer.use_var(expr[1])
+        elif expr[0] == 'number':
+            return 'integer' 
     elif isinstance(expr, int):
         return 'integer'
     else:
@@ -142,7 +143,10 @@ def p_term(p):
 def p_factor(p):
     '''factor : NUMBER
               | IDENTIFIER'''
-    p[0] = p[1]
+    if p.slice[1].type == 'NUMBER':
+        p[0] = ('number', p[1])
+    elif p.slice[1].type == 'IDENTIFIER':
+        p[0] = ('identifier', p[1])
 
 #empty
 

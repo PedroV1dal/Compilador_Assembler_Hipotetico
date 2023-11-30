@@ -4,25 +4,72 @@ class IntermediaryCode:
         self.code = []
         self.temp_count = 0
 
-    def generate_temporary(self):
-        temp_var = f"t{len(self.code)}"
-        self.temp_count += 1
-        return temp_var
+    def generate(self, node):
+        if node in None:
+            return
+        method_name = 'generate_' + type(node).__name__.lower()
+        generator = getattr(self, method_name, self.default_generator)
+        return generator(node)
     
-    def add_instruction(self, opcode, operand1, operand2, result):
-        instruction = (opcode, operand1, operand2, result)
-        self.code.append(instruction)
-        
-    def get_instructions(self):
-        return self.code  
+    def generic_generator(self, node):
+        for child in node:
+            self.generate(child)
 
-    def __str__(self):
-        code_str = ""
-        for op, arg1, arg2, result in self.code:
-            if arg1 is None:
-                code_str += f'{op} {result}\n'
-            elif arg2 is None:
-                code_str += f'{op} {arg1}, {result}\n'
-            else:
-                code_str += f'{op} {arg1}, {arg2}, {result}\n'
-        return code_str
+    def generate_program(self, node):
+        self.code.append('INIP')
+        self.generate(node.declarations)
+        self.generate(node.compound_statement)
+        self.code.append('ENDP')
+    
+    def generate_Declaration(self, node):
+        for var in node.variable_list:
+            self.code.append(f'ALLOC {var.name}')
+
+    def generate_Assignment(self, node):
+        self.generate(node.right)
+        self.code.append(f'STOR {node.variable.name}')
+
+    def generate_If(self, node):
+        self.generate(node.condition)
+        label_else = self.new_label()
+        self.code.append(f'JUMP_FALSE {label_else}')
+        self.genetare(node.true_block)
+        if node.false_block:
+            label_end = self.new_label()
+            self.code.append(f'JUMP {label_end}')
+            self.code.append(f'{label_else}:')
+            self.generate(node.false_block)
+            self.code.append(f'{label_end}:')
+        else:
+            self.code.append(f'{label_else}:')
+
+    def generate_While(self, node):
+        label_start = self.new_label()
+        label_end = self.new_label()
+        self.code.append(f'{label_start}:')
+        self.generate(node.condition)
+        self.code.append(f'JUMP_FALSE {label_end}')
+        self.generate(node.body)
+        self.code.append(f'JUMP {label_start}')
+        self.code.append(f'{label_end}:')
+    
+    def generate_BinOp(self, node):
+        self.generate(node.left)
+        self.generate(node.right)
+        if node.op == '+':
+            self.code.append('ADD')
+        elif node.op == '-':
+            self.code.append('SUB')
+        elif node.op == '*':
+            self.code.append('MULT')
+        elif node.op == '/':
+            self.code.append('DIV')
+
+    def get_code(self):
+        """ Retorna o código intermediário gerado. """
+        return '\n'.join(self.code)
+
+    def new_label(self):
+        """ Gera um novo label único. """
+        self.temp_count += 1
+        return f'L{self.temp_count}'
